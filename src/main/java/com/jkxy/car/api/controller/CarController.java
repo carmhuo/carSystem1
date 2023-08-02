@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-
 @RestController
 @RequestMapping("car")
 public class CarController {
@@ -84,5 +83,20 @@ public class CarController {
     public JSONResult insertCar(Car car) {
         carService.insertCar(car);
         return JSONResult.ok();
+    }
+
+    @GetMapping("purchase/{carName}/{num}")
+    public JSONResult purchaseCar(@PathVariable("carName") String carName, @PathVariable("num") int num) {
+        boolean res = carService.purchaseCar(num, carName);
+        if (!res) {
+            return JSONResult.build(200, "FAILURE", "购买失败，库存不足");
+        }
+        return JSONResult.build(200, "SUCCESS", "购买成功");
+    }
+
+    @GetMapping("searchByCarName/{carName}/{currentPage}/{pageSize}")
+    public JSONResult searchByCarName(@PathVariable String carName, @PathVariable int currentPage, @PathVariable int pageSize) {
+        List<Car> cars = carService.searchByCarName(carName, currentPage, pageSize);
+        return JSONResult.ok(cars);
     }
 }

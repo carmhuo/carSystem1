@@ -25,4 +25,7 @@ public interface CarDao {
 
     @Insert("insert into carMessage(carName,carType,price,carSeries) values(#{carName},#{carType},#{price},#{carSeries})")
     void insertCar(Car car);
+
+    @Select("select * from carMessage where carName like '%' || #{carName} || '%' limit #{pageSize} offset #{start}")
+    List<Car> searchByCarName(String carName, Integer start, Integer pageSize);
 }
